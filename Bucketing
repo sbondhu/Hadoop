@@ -19,3 +19,10 @@ hive> create table bucks ( pid string, age int)
     > select * from trans;      
     
     
+Bucketing is used for sampling.
+Buckets are file samples
+different buckets can be given be to different analyst for data analysis.
+Same type products always into same buckets
+A single bucket can have multiple keys
+A single key can only be in one specific bucket
+Hashvalue of the key mod 2 ----> underlying principle of how keys are separated into buckets
