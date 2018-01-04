@@ -1,0 +1,21 @@
+create table trans
+    > ( pid string, age int)   
+    > row format delimited
+    > fields terminated by ',';
+
+
+load data local inpath '/home/cloudera/Desktop/trans' into table trans;
+
+select * from trans;
+
+hive> create table bucks ( pid string, age int)
+    > clustered by (pid) into 3 buckets        
+    > row format delimited                     
+    > fields terminated by ',';  
+    
+    set hive.enforce.bucketing=true; 
+    
+    hive> insert overwrite table bucks
+    > select * from trans;      
+    
+    
