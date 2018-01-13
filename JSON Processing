@@ -1,0 +1,42 @@
+XML DATASET with collections:
+
+<tr><cid>101</cid><pr>1000</pr><pr>2000</pr><pr>4000</pr></tr>
+<tr><cid>102</cid><pr>3000</pr><pr>5000</pr></tr>
+<tr><cid>101</cid><pr>5000</pr></tr>
+
+Cid - customer id
+pr- price
+
+generate bil for each customer.
+
+select xpath_string(line,'tr/cid') from xml_raw; -- To select the cust ids
+select xpath_string(line,'tr/pr') from xml_raw; -- gives only the first price
+
+hive> select xpath_string(line,'tr/pr')             
+    > xpath_string(line,'tr/cid') from xml_raw; ---Customer id and first price
+	
+	
+	select xpath(line,'tr/pr/text()') from xml_raw; -- to get all the price array
+	
+	hive> select xpath_string(line,'tr/cid'),     
+    > xpath(line,'tr/pr/text()') from xml_raw; -- Customer id and price array
+	
+	
+	
+hive> create table xraw2 ( cid string, pid array<string>);
+
+hive> insert overwrite table xraw2            
+    > select xpath_string(line,'tr/cid'),     
+    > xpath(line,'tr/pr/text()') from xml_raw;
+
+	
+	select explode (pid) p from xraw2;
+	
+select cid, pr_id from xraw2 lateral view explode (pid) p as pr_id;
+
+create table sales ( cid string , price string);
+
+insert into table sales
+    > select cid, pr_id from xraw2 lateral view explode (pid) p as pr_id;
+	
+	select cid, sum(price) as total from sales group by cid;
