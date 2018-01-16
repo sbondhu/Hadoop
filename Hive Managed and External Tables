@@ -16,7 +16,7 @@ select * from hive_test2;
 drop table hive_test2;
 
 hadoop fs -ls /user/hive/warehouse/hive_test2 -- No data
-hadoop fs -put /home/cloudera/Desktop/hive_test2  /deep -- No data
+hadoop fs -ls /home/cloudera/Desktop/hive_test2  /deep -- No data
 
 #External Tables
 
